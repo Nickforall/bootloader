@@ -188,6 +188,25 @@ pub extern "C" fn load_elf(
         page
     };
 
+    // Map pages for the heap
+    {
+        let heap_start_page = Page::containing_address(VirtAddr::new(0x486000));
+        let heap_end_page = Page::containing_address(VirtAddr::new(0x486000 + (1024 * 1024)));        
+        let flags = PageTableFlags::PRESENT | PageTableFlags::WRITABLE;
+
+        for page in Page::range_inclusive(heap_start_page, heap_end_page) {
+            let frame = frame_allocator
+                .allocate_frame(MemoryRegionType::InUse)
+                .expect("frame allocation failed");
+             page_table::map_page(
+                page,
+                frame,
+                flags,
+                &mut rec_page_table,
+                &mut frame_allocator,
+            ).expect("Mapping of heap failed").flush();
+        }
+    }
     // Construct boot info structure.
     let mut boot_info = BootInfo::new(recursive_page_table_addr.start_address().as_u64(), memory_map);
     boot_info.memory_map.sort();
