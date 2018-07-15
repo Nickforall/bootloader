@@ -64,7 +64,7 @@ impl IdentityMappedAddr {
 }
 
 // Symbols defined in `linker.ld`
-extern {
+extern "C" {
     static mmap_ent: usize;
     static _memory_map: usize;
     static _kib_kernel_size: usize;
@@ -208,7 +208,8 @@ fn load_elf(
         &segments,
         &mut rec_page_table,
         &mut frame_allocator,
-    ).expect("kernel mapping failed");
+    )
+    .expect("kernel mapping failed");
 
     // Map a page for the boot info structure
     let boot_info_page = {
@@ -223,7 +224,8 @@ fn load_elf(
             flags,
             &mut rec_page_table,
             &mut frame_allocator,
-        ).expect("Mapping of bootinfo page failed")
+        )
+        .expect("Mapping of bootinfo page failed")
         .flush();
         page
     };
@@ -231,20 +233,22 @@ fn load_elf(
     // Map pages for the heap
     {
         let heap_start_page = Page::containing_address(VirtAddr::new(0x486000));
-        let heap_end_page = Page::containing_address(VirtAddr::new(0x486000 + (1024 * 1024)));        
+        let heap_end_page = Page::containing_address(VirtAddr::new(0x486000 + (1024 * 1024)));
         let flags = PageTableFlags::PRESENT | PageTableFlags::WRITABLE;
 
         for page in Page::range_inclusive(heap_start_page, heap_end_page) {
             let frame = frame_allocator
                 .allocate_frame(MemoryRegionType::InUse)
                 .expect("frame allocation failed");
-             page_table::map_page(
+            page_table::map_page(
                 page,
                 frame,
                 flags,
                 &mut rec_page_table,
                 &mut frame_allocator,
-            ).expect("Mapping of heap failed").flush();
+            )
+            .expect("Mapping of heap failed")
+            .flush();
         }
     }
     // Construct boot info structure.
@@ -275,20 +279,6 @@ fn enable_nxe_bit() {
 fn enable_write_protect_bit() {
     use x86_64::registers::control::{Cr0, Cr0Flags};
     unsafe { Cr0::update(|cr0| *cr0 |= Cr0Flags::WRITE_PROTECT) };
-}
-
-#[panic_handler]
-#[no_mangle]
-pub extern "C" fn panic(info: &PanicInfo) -> ! {
-    use core::fmt::Write;
-    write!(printer::Printer, "{}", info).unwrap();
-    loop {}
-}
-
-#[lang = "eh_personality"]
-#[no_mangle]
-pub extern "C" fn eh_personality() {
-    loop {}
 }
 
 #[no_mangle]

@@ -1,17 +1,12 @@
 {
     "llvm-target": "x86_64-unknown-none-gnu",
     "data-layout": "e-m:e-i64:64-f80:128-n8:16:32:64-S128",
-<<<<<<< HEAD
     "linker-flavor": "ld",
     "linker": "x86_64-none-elf-ld.bfd",
-=======
-    "linker-flavor": "ld.lld",
-    "linker": "rust-lld",
->>>>>>> Use LLD for linking and reorganize assembly stages
     "pre-link-args": {
         "ld.lld": [
-	    "--script=linker.ld"
-	]
+            "--script=linker.ld"
+        ]
     },
     "target-endian": "little",
     "target-pointer-width": "64",
@@ -22,5 +17,5 @@
     "disable-redzone": true,
     "panic": "abort",
     "executables": true,
-	"relocation_model": "static"
+    "relocation_model": "static"
 }

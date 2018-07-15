@@ -180,19 +180,12 @@ rest_of_bootloader_load_failed:
     lea si, rest_of_bootloader_load_failed_str
     jmp real_mode_error
 
-<<<<<<< HEAD:src/boot.s
 boot_start_str: .asciz "Booting stage1"
 second_stage_start_str: .asciz "Booting stage2"
 error_str: .asciz "ERR: "
 no_cpuid_str: .asciz "No CPUID"
 no_int13h_extensions_str: .asciz "No int13h ext support"
 second_stage_load_failed_str: .asciz "Failed loading stage2"
-=======
-boot_start_str: .asciz "Booting (first stage)..."
-error_str: .asciz "Error: "
-no_int13h_extensions_str: .asciz "No support for int13h extensions"
-rest_of_bootloader_load_failed_str: .asciz "Failed to load rest of bootloader"
->>>>>>> Use LLD for linking and reorganize assembly stages:src/stage_1.s
 
 gdt32info:
    .word gdt32_end - gdt32 - 1  # last byte in table
