@@ -177,12 +177,12 @@ kernel_load_failed:
     lea si, kernel_load_failed_str
     jmp error
 
-boot_start_str: .asciz "Booting (first stage)..."
-second_stage_start_str: .asciz "Booting (second stage)..."
-error_str: .asciz "Error: "
-no_cpuid_str: .asciz "No CPUID support"
-no_int13h_extensions_str: .asciz "No support for int13h extensions"
-second_stage_load_failed_str: .asciz "Failed to load second stage of bootloader"
+boot_start_str: .asciz "Booting stage1"
+second_stage_start_str: .asciz "Booting stage2"
+error_str: .asciz "ERR: "
+no_cpuid_str: .asciz "No CPUID"
+no_int13h_extensions_str: .asciz "No int13h ext support"
+second_stage_load_failed_str: .asciz "Failed loading stage2"
 
 gdtinfo:
    .word gdt_end - gdt - 1  # last byte in table
