@@ -190,7 +190,6 @@ second_stage_load_failed_str: .asciz "Failed loading stage2"
 =======
 boot_start_str: .asciz "Booting (first stage)..."
 error_str: .asciz "Error: "
-no_cpuid_str: .asciz "No CPUID support"
 no_int13h_extensions_str: .asciz "No support for int13h extensions"
 rest_of_bootloader_load_failed_str: .asciz "Failed to load rest of bootloader"
 >>>>>>> Use LLD for linking and reorganize assembly stages:src/stage_1.s
